@@ -1,6 +1,6 @@
 """Katie Mishra | July 2019 | katiemishra@gmail.com
 Synthesizes speech from the input string of text or ssml.
-Exports in both mp3 and wav format. """
+Exports in both mp3 and wav format. Requires Google API credential in bash profile. """
 from google.cloud import texttospeech
 from os import path
 from pydub import AudioSegment
@@ -40,9 +40,10 @@ for voice_name in voice_names:
         print('Audio content written to file ' + file_name)
 
     # file naming
-    """src = file_name
-    dst = voice_name + ".wav"
+    src = file_name
+    dst = "Samples/" + voice_name + ".wav"
 
     # convert mp3 to wav
     sound = AudioSegment.from_mp3(src)
-    sound.export(dst, format="wav")"""
+    sound.export(dst, format="wav")
+    print('Audio content written to file ' + dst)

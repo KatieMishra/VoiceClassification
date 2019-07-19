@@ -7,6 +7,8 @@ from os import path
 from pydub import AudioSegment
 import os
 from subprocess import call
+import subprocess
+from os import system
 
 # Instantiates a client
 client = texttospeech.TextToSpeechClient()
@@ -21,13 +23,19 @@ one_sec_segment = AudioSegment.silent(duration=1000)  #duration in milliseconds
 # codes for voices to generate
 voice_names = ['en-US-Standard-B','en-US-Standard-C','en-US-Standard-D','en-US-Standard-E','en-US-Wavenet-A','en-US-Wavenet-B','en-US-Wavenet-C','en-US-Wavenet-D','en-US-Wavenet-E','en-US-Wavenet-F']
 
-call("cd ./Samples")
+# detect the current working directory and print it
+path = os.getcwd()
+print ("The current working directory is %s" % path)
 
 for word in words:
-
+    path = "Samples/" + word
     #create folder and navigate to correct directory
-    call("mkdir " + word)
-    call("cd " + word)
+    try:
+        os.mkdir(path)
+    except OSError:
+        print ("Creation of the directory %s failed" % path)
+    else:
+        print ("Successfully created the directory %s " % path)
 
     # Set the text input to be synthesized
     synthesis_input = texttospeech.types.SynthesisInput(text=word)
@@ -49,7 +57,8 @@ for word in words:
 
         #specify file name based on voice used
         file_type = ".mp3"
-        file_name = voice_name + file_type
+        file_name = path + "/" + voice_name + file_type
+        print file_name
 
         # The response's audio_content is binary.
         with open(file_name, 'wb') as out:
@@ -59,14 +68,12 @@ for word in words:
 
         # file naming
         src = file_name
-        dst = voice_name + ".wav"
+        dst = path + "/" + word + "-" + voice_name + ".wav"
 
         # convert mp3 to wav
         sound = AudioSegment.from_mp3(src)
         sound.export(dst, format="wav")
-        print('Audio content written to file ' + dst)
         os.remove(src)
-        print('Deleted' + src)
 
         #add silence at beginning and end of wav file (necessary for sphinx analysis)
         #read wav file to an audio segment
@@ -75,5 +82,3 @@ for word in words:
         final_audio = one_sec_segment + initial_audio + one_sec_segment
         #Either save modified audio
         final_audio.export(dst, format="wav")
-
-        call("cd ..")

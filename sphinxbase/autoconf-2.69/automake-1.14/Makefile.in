@@ -99,10 +99,9 @@ DIST_COMMON = $(srcdir)/bin/Makefile.inc $(srcdir)/doc/Makefile.inc \
 	$(srcdir)/lib/am/Makefile.inc $(srcdir)/m4/Makefile.inc \
 	$(srcdir)/t/Makefile.inc $(srcdir)/t/list-of-tests.mk \
 	$(srcdir)/t/testsuite-part.am $(srcdir)/contrib/t/Makefile.inc \
-	$(srcdir)/t/CheckListOfTests.am INSTALL NEWS README AUTHORS \
-	ChangeLog $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
-	$(top_srcdir)/configure $(am__configure_deps) \
-	$(top_srcdir)/lib/mkinstalldirs \
+	$(srcdir)/t/CheckListOfTests.am $(srcdir)/Makefile.in \
+	$(srcdir)/Makefile.am $(top_srcdir)/configure \
+	$(am__configure_deps) $(top_srcdir)/lib/mkinstalldirs \
 	$(top_srcdir)/t/wrap/aclocal.in \
 	$(top_srcdir)/t/wrap/automake.in $(srcdir)/GNUmakefile \
 	$(dist_noinst_SCRIPTS) $(doc_automake_TEXINFOS) \
@@ -112,13 +111,14 @@ DIST_COMMON = $(srcdir)/bin/Makefile.inc $(srcdir)/doc/Makefile.inc \
 	$(dist_automake_ac_DATA) $(dist_automake_internal_ac_DATA) \
 	$(dist_doc_DATA) $(dist_noinst_DATA) $(dist_perllib_DATA) \
 	$(dist_pkgvdata_DATA) $(dist_script_DATA) \
-	$(dist_system_ac_DATA) $(top_srcdir)/lib/test-driver COPYING \
-	lib/COPYING lib/INSTALL THANKS lib/ar-lib lib/compile \
-	lib/config.guess lib/config.sub lib/depcomp lib/install-sh \
-	lib/mdate-sh lib/missing lib/mkinstalldirs lib/py-compile \
-	lib/texinfo.tex lib/ylwrap $(top_srcdir)/lib/compile \
-	$(top_srcdir)/lib/config.guess $(top_srcdir)/lib/config.sub \
-	$(top_srcdir)/lib/install-sh $(top_srcdir)/lib/missing
+	$(dist_system_ac_DATA) $(top_srcdir)/lib/test-driver AUTHORS \
+	COPYING lib/COPYING ChangeLog INSTALL lib/INSTALL NEWS README \
+	THANKS lib/ar-lib lib/compile lib/config.guess lib/config.sub \
+	lib/depcomp lib/install-sh lib/mdate-sh lib/missing \
+	lib/mkinstalldirs lib/py-compile lib/texinfo.tex lib/ylwrap \
+	$(top_srcdir)/lib/compile $(top_srcdir)/lib/config.guess \
+	$(top_srcdir)/lib/config.sub $(top_srcdir)/lib/install-sh \
+	$(top_srcdir)/lib/missing
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/amversion.m4 \
@@ -2464,15 +2464,15 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/bin/Makefile.inc $(srcdi
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
-	      echo ' cd $(srcdir) && $(AUTOMAKE) --gnu --ignore-deps'; \
-	      $(am__cd) $(srcdir) && $(AUTOMAKE) --gnu --ignore-deps \
+	      echo ' cd $(srcdir) && $(AUTOMAKE) --foreign --ignore-deps'; \
+	      $(am__cd) $(srcdir) && $(AUTOMAKE) --foreign --ignore-deps \
 		&& exit 0; \
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu --ignore-deps Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign --ignore-deps Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu --ignore-deps Makefile
+	  $(AUTOMAKE) --foreign --ignore-deps Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

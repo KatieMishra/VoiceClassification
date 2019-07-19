@@ -1,0 +1,3 @@
+#JSGF V1.0;
+grammar forcing;
+public <with> = sil w ih dh [ sil ];

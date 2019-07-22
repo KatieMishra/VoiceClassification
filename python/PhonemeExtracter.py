@@ -7,8 +7,10 @@ import subprocess
 from os import system
 import string
 import json
-from tokenize import tokenize
 from nltk.tokenize import sent_tokenize, word_tokenize
+import wave
+import struct
+import numpy as np
 
 # codes for voices to generate
 voice_names = ['en-US-Standard-B','en-US-Standard-C','en-US-Standard-D','en-US-Standard-E','en-US-Wavenet-A','en-US-Wavenet-B','en-US-Wavenet-C','en-US-Wavenet-D','en-US-Wavenet-E','en-US-Wavenet-F']
@@ -39,6 +41,25 @@ for chosen_voice in voice_names:
             linesToSave.append(line)
     file.close()
 
+    data_size = 4000
+    frate = 11025.0
+    wav_file = wave.open("Samples/with/with-" + chosen_voice + ".wav", 'r')
+    data = wav_file.readframes(data_size)
+    wav_file.close()
+    data = struct.unpack('{n}h'.format(n=data_size), data)
+    data = np.array(data)
+
+    w = np.fft.fft(data)
+    freqs = np.fft.fftfreq(len(w))
+    print(freqs.min(), freqs.max())
+    # (-0.5, 0.499975)
+
+    # Find the peak in the coefficients
+    idx = np.argmax(np.abs(w))
+    freq = freqs[idx]
+    freq_in_hertz = abs(freq * frate)
+    # 439.8975
+
     # tokenize phoneme analysis lines to save duration and acsr score in a new json file
     json_file = "possible_voices/chosen_voice" + ".json"
     with open(json_file, 'w') as outfile:
@@ -53,4 +74,5 @@ for chosen_voice in voice_names:
             phoneme = tokens[2]
             phoneme_analysis = {phoneme : data}
             word_analysis.update(phoneme_analysis)
+        word_analysis.update({"freq":freq_in_hertz})
         json.dump(word_analysis, outfile)

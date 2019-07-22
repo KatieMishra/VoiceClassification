@@ -14,9 +14,10 @@ from os import system
 client = texttospeech.TextToSpeechClient()
 
 #words to generate samples for
-words = ["odd","at","hut","ought","cow","hide","be","cheese","thee","Ed","hurt","ate","fee","green","he","it","eat","gee","key","lee","me","knee","ping","oat",
-  "toy","pee","read","sea","she","tea","theta","hood","two","vee","we","yield","zee","seizure"]
+#words = ["odd","at","hut","ought","cow","hide","be","cheese","thee","Ed","hurt","ate","fee","green","he","it","eat","gee","key","lee","me","knee","ping","oat",
+  #"toy","pee","read","sea","she","tea","theta","hood","two","vee","we","yield","zee","seizure"]
 
+words = ["with"]
 # create 1 sec of silence audio segment
 one_sec_segment = AudioSegment.silent(duration=1000)  #duration in milliseconds
 

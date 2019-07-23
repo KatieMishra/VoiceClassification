@@ -11,6 +11,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 import wave
 import struct
 import numpy as np
+from scipy.io.wavfile import read
 
 modulePath = '/Users/katiemishra/Desktop/VoiceClassification/AudioLibraries' # change as appropriate
 import sys
@@ -49,6 +50,7 @@ for chosen_voice in voice_names:
             linesToSave.append(line)
     file.close()
 
+    # find min and max frequency
     data_size = 4000
     frate = 11025.0
     wav_file = wave.open("Samples/with/with-" + chosen_voice + ".wav", 'r')
@@ -59,16 +61,24 @@ for chosen_voice in voice_names:
 
     w = np.fft.fft(data)
     freqs = np.fft.fftfreq(len(w))
-    print(freqs.min(), freqs.max())
-    # (-0.5, 0.499975)
+    min_freq = freqs.min()
+    max_freq = freqs.max()
 
-
-
-    # Find the peak in the coefficients
+    # Find the peak in the coefficients (aka sampling frequency)
     idx = np.argmax(np.abs(w))
     freq = freqs[idx]
     freq_in_hertz = abs(freq * frate)
-    # 439.8975
+
+    # convert wav file to numpy array
+    a = read("Samples/with/with-" + chosen_voice + ".wav")
+    arrFromWav = np.array(a[1],dtype=float)
+    """for test in arrFromWav:
+        if(test != 0.0):
+            print test
+            print np.where(arrFromWav == test)"""
+
+    # find fundamental frequency
+    print dspUtil.calculateF0(arrFromWav, freq_in_hertz, min_freq, max_freq, 0.3, False)
 
     # tokenize phoneme analysis lines to save duration and acsr score in a new json file
     json_file = "possible_voices/chosen_voice" + ".json"

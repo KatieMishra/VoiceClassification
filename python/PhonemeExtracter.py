@@ -12,6 +12,14 @@ import wave
 import struct
 import numpy as np
 
+modulePath = '/Users/katiemishra/Desktop/VoiceClassification/AudioLibraries' # change as appropriate
+import sys
+sys.path.append(modulePath)
+# now you're good to import the modules
+import generalUtility
+import dspUtil
+import matplotlibUtil
+
 # codes for voices to generate
 voice_names = ['en-US-Standard-B','en-US-Standard-C','en-US-Standard-D','en-US-Standard-E','en-US-Wavenet-A','en-US-Wavenet-B','en-US-Wavenet-C','en-US-Wavenet-D','en-US-Wavenet-E','en-US-Wavenet-F']
 
@@ -53,6 +61,8 @@ for chosen_voice in voice_names:
     freqs = np.fft.fftfreq(len(w))
     print(freqs.min(), freqs.max())
     # (-0.5, 0.499975)
+
+
 
     # Find the peak in the coefficients
     idx = np.argmax(np.abs(w))
